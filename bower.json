@@ -1,0 +1,36 @@
+{
+  "name": "ritmica",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular-animate": "~1.3.4",
+    "angular-cookies": "~1.3.4",
+    "angular-touch": "~1.3.4",
+    "angular-sanitize": "~1.3.4",
+    "jquery": "~2.1.1",
+    "angular-resource": "~1.3.4",
+    "angular-ui-router": "~0.2.13",
+    "angular": "~1.3.4",
+    "angular-google-maps": "~2.0.17",
+    "angular-material": "~0.8.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.4",
+    "angular-google-maps": "~2.0.17"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1",
+    "angular": "~1.3.4"
+  },
+  "authors": [
+    "Wouter Merckx <woutermerckx@gmail.com>"
+  ],
+  "description": "Ritmica maps app",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

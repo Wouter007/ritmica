@@ -1,0 +1,212 @@
+<div class="page-wrap row">
+
+  <aside class="sidebar col-lg-3 col-sm-5 col-xs-12">
+  
+  <header class="sidebar-header">
+    <div class="logo">
+      <a href="#"ng-click="openInfoWindow(extraMarkers[0])" ng-mouseover="showMarker(extraMarkers[0])" ng-mouseleave="hideMarker(extraMarkers[0])">
+        <img src="app/images/logo.png" alt="Ritmica">
+      </a>
+    </div>
+
+    <div class="zoekterm-wrapper">
+      <input ng-model="zoekQuery" ng-Change="filterAllMarkers()" type="text" placeholder="Zoek.." class="input-zoekterm">
+    </div>
+   
+    <a href="#" class="uitleg">
+      Selecteer categorie
+    </a>
+
+    <div class="categorie-checkboxen">
+
+      <input type="checkbox" ng-click="includeCategorie('sport')" value="Sport" id="sport" class="categorie-checkbox sport">
+      <label for="sport" class="categorie-label sport"> Sport</label>
+
+      <input type="checkbox" ng-click="includeCategorie('cultuur')" value="Cultuur" id="cultuur" class="categorie-checkbox cultuur">
+      <label for="cultuur" class="categorie-label cultuur"> Cultuur</label>
+
+      <input type="checkbox" ng-click="includeCategorie('creatief')" value="Creatief" id="creatief" class="categorie-checkbox creatief">
+      <label for="creatief" class="categorie-label creatief"> Creatief</label>  
+
+      <input type="checkbox" ng-click="includeCategorie('varia')" value="Varia" id="varia" class="categorie-checkbox varia">
+      <label for="varia" class="categorie-label varia"> Varia</label>
+
+      <input type="checkbox" ng-click="includeCategorie('vorming')" value="Vorming" id="vorming" class="categorie-checkbox vorming">
+      <label for="vorming" class="categorie-label vorming"> Vorming &amp; workshops</label>
+
+    </div>
+
+    <button ng-click="dichtbijCenter()">Sorteer op dichtbij</button>
+    <button ng-click="dichtbijCurrentPosition()">Sorteer op dichtbij mij</button>
+
+  </header>
+
+  <section class="sidebar-section">
+    <ul>
+      <li ng-repeat="marker in filteredMarkers | orderBy: 'organisatie'">
+<!--         <a ng-click="openInfoWindow(marker)" ng-mouseover="showMarker(marker)" ng-mouseleave="hideMarker(marker)" ng-class="marker.categorie" class="listed-marker">
+ -->        <a ng-click="openInfoWindow(marker)" ng-class="marker.categorie" class="listed-marker">
+          <div class="marker-list-organisatie">
+            {{marker.organisatie}} 
+          </div>
+          <div class="marker-list-type">
+            {{marker.type}}
+          </div>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  </aside>
+
+  <div class="maps col-lg-9 col-sm-7 col-xs-12" id="google-map">
+    <ui-gmap-google-map 
+      center='map.center' 
+      zoom='map.zoom' 
+      options='options' 
+      events='map.events'
+      control='map.control'
+    >
+
+      <ui-gmap-markers
+        models="allMarkers"
+        coords="'self'"
+        icon="'icon'"
+        events="markerEvents.events"
+        doCluster="false"
+      >
+
+        <ui-gmap-windows
+          show="true"
+        >
+
+          <div ng-non-bindable class="window-wrapper">
+            <div>
+              {{organisatie}}
+            </div>
+            <div>
+              {{adres}}
+            </div> 
+            <div>
+              {{type}} {{categorie}}
+            </div> 
+          </div>
+
+        </ui-gmap-windows>
+
+      </ui-gmap-markers>
+
+    </ui-gmap-google-map>
+
+    <div class="marker-info">
+
+      <div class="container">
+        <a href="#" class="marker-info-close">
+          <svg viewBox="0 0 512 512" width="32px" height="32px"><path d="M74.966,437.013c-99.97-99.97-99.97-262.065,0-362.037c100.002-99.97,262.066-99.97,362.067,0  c99.971,99.971,99.971,262.067,0,362.037C337.032,536.998,174.968,536.998,74.966,437.013z M391.782,120.227  c-75.001-74.985-196.564-74.985-271.534,0c-75.001,74.985-75.001,196.55,0,271.535c74.97,74.986,196.533,74.986,271.534,0  C466.754,316.775,466.754,195.212,391.782,120.227z M188.124,369.137l-45.251-45.266l67.876-67.877l-67.876-67.876l45.251-45.267  L256,210.743l67.877-67.892l45.25,45.267l-67.876,67.876l67.876,67.877l-45.25,45.266L256,301.245L188.124,369.137z"/>
+          </svg>
+        </a>
+
+        <div class="marker-info-organisatie">
+          <h1>{{activeMarker.organisatie}}</h1>
+          <div class="marker-info-type" ng-if="activeMarker.type">
+            {{activeMarker.type}} ({{activeMarker.categorie}})
+          </div>
+        </div>
+        
+        <div class="marker-info-omschrijving">
+          <div class="marker-info-alinea1" ng-if="activeMarker.alinea1">
+            <p>
+              {{activeMarker.alinea1}}
+            </p>
+          </div>        
+          <div class="marker-info-alinea2" ng-if="activeMarker.alinea2">
+            <p>
+              {{activeMarker.alinea2}}
+            </p>
+          </div>
+        </div>
+        
+
+        <div class="contact-box" ng-if="activeMarker.contactpersoon || activeMarker.mail || activeMarker.tel || activeMarker.adres || activeMarker.website">
+          <svg width="32px" height="32px" viewBox="0 0 32 32" id="contact-box-svg"><path d="M15.58,18.332h-0.777c-0.403,0-0.73-0.326-0.73-0.729c0-0.149,0.06-0.293,0.167-0.397c0.452-0.439,0.832-1.03,1.107-1.667 c0.056,0.041,0.116,0.071,0.184,0.071c0.436,0,0.95-0.964,0.95-1.621c0-0.657-0.061-1.19-0.498-1.19 c-0.052,0-0.106,0.009-0.162,0.023c-0.031-1.782-0.481-4.005-3.202-4.005c-2.839,0-3.17,2.219-3.202,3.999 c-0.04-0.008-0.08-0.017-0.117-0.017c-0.437,0-0.497,0.533-0.497,1.19c0,0.657,0.512,1.621,0.949,1.621 c0.054,0,0.104-0.015,0.151-0.042c0.274,0.627,0.649,1.206,1.094,1.641c0.107,0.104,0.167,0.246,0.167,0.396 c0,0.403-0.327,0.73-0.73,0.73H9.656c-1.662,0-3.009,1.347-3.009,3.009v0.834c0,0.524,0.425,0.95,0.95,0.95h10.042 c0.524,0,0.949-0.426,0.949-0.95v-0.834C18.589,19.68,17.242,18.332,15.58,18.332z"/><path d="M24.589,10.077h-8.421c0.243,0.538,0.417,1.2,0.489,2.019c0.18,0.111,0.315,0.29,0.425,0.506h7.507 c0.39,0,0.704-0.315,0.704-0.704v-1.117C25.293,10.393,24.979,10.077,24.589,10.077z"/><path d="M24.589,14.678h-7.335c-0.199,0.752-0.689,1.539-1.368,1.749c-0.02,0.037-0.043,0.069-0.064,0.106v0.67h8.766 c0.389,0,0.704-0.315,0.704-0.705v-1.116C25.293,14.993,24.979,14.678,24.589,14.678z"/><path d="M24.589,19.279h-5.726c0.378,0.598,0.6,1.303,0.6,2.062v0.463h5.126c0.39,0,0.704-0.315,0.704-0.704v-1.117 C25.293,19.594,24.979,19.279,24.589,19.279z"/><path d="M27.615,3.057H4.325C1.936,3.057,0,4.993,0,7.382v17.176c0,2.39,1.936,4.325,4.325,4.325h23.29 c2.389,0,4.324-1.936,4.324-4.325V7.382C31.939,4.993,30.004,3.057,27.615,3.057z M29.898,24.558c0,1.259-1.024,2.283-2.283,2.283 H4.325c-1.259,0-2.283-1.024-2.283-2.283V7.382c0-1.259,1.024-2.283,2.283-2.283h23.29c1.259,0,2.283,1.024,2.283,2.283V24.558z"/></svg>
+
+          <h3>Contactinformatie</h3>
+          <div class="contact-box-internal-wrapper">
+            <div class="contact-box-internal">
+              <div class="contact-box-adres" ng-if="activeMarker.adres">
+                <svg viewBox="0 0 512 512" height="16px" width="16px"><path d="M256,0C149.969,0,64,85.969,64,192s192,320,192,320s192-213.969,192-320S362.031,0,256,0z M256,320 c-70.688,0-128-57.312-128-128c0-70.688,57.312-128,128-128c70.688,0,128,57.312,128,128C384,262.688,326.688,320,256,320z"/></svg>
+                <div class="content">
+                  {{activeMarker.adres}}
+                </div>
+              </div>
+
+              <div class="contact-box-persoon" ng-if="activeMarker.contactpersoon">
+                <svg width="16px" height="16px" viewBox="0 0 410 410"><path d="M204.583,216.671c50.664,0,91.74-48.075,91.74-107.378c0-82.237-41.074-107.377-91.74-107.377 c-50.668,0-91.74,25.14-91.74,107.377C112.844,168.596,153.916,216.671,204.583,216.671z"/><path d="M407.164,374.717L360.88,270.454c-2.117-4.771-5.836-8.728-10.465-11.138l-71.83-37.392 c-1.584-0.823-3.502-0.663-4.926,0.415c-20.316,15.366-44.203,23.488-69.076,23.488c-24.877,0-48.762-8.122-69.078-23.488 c-1.428-1.078-3.346-1.238-4.93-0.415L58.75,259.316c-4.631,2.41-8.346,6.365-10.465,11.138L2.001,374.717 c-3.191,7.188-2.537,15.412,1.75,22.005c4.285,6.592,11.537,10.526,19.4,10.526h362.861c7.863,0,15.117-3.936,19.402-10.527 C409.699,390.129,410.355,381.902,407.164,374.717z"/></svg>
+                <div class="content">
+                  {{activeMarker.contactpersoon}}
+                </div>
+              </div>
+
+              <div class="contact-box-tel" ng-if="activeMarker.tel">
+                <svg viewBox="0 0 578 578" width="16px" height="16px"><path d="M577.83,456.128c1.225,9.385-1.635,17.545-8.568,24.48l-81.396,80.781 c-3.672,4.08-8.465,7.551-14.381,10.404c-5.916,2.857-11.729,4.693-17.439,5.508c-0.408,0-1.635,0.105-3.676,0.309 c-2.037,0.203-4.689,0.307-7.953,0.307c-7.754,0-20.301-1.326-37.641-3.979s-38.555-9.182-63.645-19.584 c-25.096-10.404-53.553-26.012-85.376-46.818c-31.823-20.805-65.688-49.367-101.592-85.68 c-28.56-28.152-52.224-55.08-70.992-80.783c-18.768-25.705-33.864-49.471-45.288-71.299 c-11.425-21.828-19.993-41.616-25.705-59.364S4.59,177.362,2.55,164.51s-2.856-22.95-2.448-30.294 c0.408-7.344,0.612-11.424,0.612-12.24c0.816-5.712,2.652-11.526,5.508-17.442s6.324-10.71,10.404-14.382L98.022,8.756 c5.712-5.712,12.24-8.568,19.584-8.568c5.304,0,9.996,1.53,14.076,4.59s7.548,6.834,10.404,11.322l65.484,124.236 c3.672,6.528,4.692,13.668,3.06,21.42c-1.632,7.752-5.1,14.28-10.404,19.584l-29.988,29.988c-0.816,0.816-1.53,2.142-2.142,3.978 s-0.918,3.366-0.918,4.59c1.632,8.568,5.304,18.36,11.016,29.376c4.896,9.792,12.444,21.726,22.644,35.802 s24.684,30.293,43.452,48.653c18.36,18.77,34.68,33.354,48.96,43.76c14.277,10.4,26.215,18.053,35.803,22.949 c9.588,4.896,16.932,7.854,22.031,8.871l7.648,1.531c0.816,0,2.145-0.307,3.979-0.918c1.836-0.613,3.162-1.326,3.979-2.143 l34.883-35.496c7.348-6.527,15.912-9.791,25.705-9.791c6.938,0,12.443,1.223,16.523,3.672h0.611l118.115,69.768 C571.098,441.238,576.197,447.968,577.83,456.128z"/></svg>
+                <div class="content">
+                  {{activeMarker.tel}}
+                </div>
+              </div>
+            </div>
+
+            
+            <div class="contact-box-internal">
+              <div class="contact-box-mail" ng-if="activeMarker.mail">
+                <svg width="16px" height="16px" viewBox="0 0 485 485"><path d="M485.211,363.906c0,10.637-2.992,20.498-7.785,29.174L324.225,221.67l151.54-132.584 c5.895,9.355,9.446,20.344,9.446,32.219V363.906z M242.606,252.793l210.863-184.5c-8.653-4.737-18.397-7.642-28.908-7.642H60.651 c-10.524,0-20.271,2.905-28.889,7.642L242.606,252.793z M301.393,241.631l-48.809,42.734c-2.855,2.487-6.41,3.729-9.978,3.729 c-3.57,0-7.125-1.242-9.98-3.729l-48.82-42.736L28.667,415.23c9.299,5.834,20.197,9.329,31.983,9.329h363.911 c11.784,0,22.687-3.495,31.983-9.329L301.393,241.631z M9.448,89.085C3.554,98.44,0,109.429,0,121.305v242.602 c0,10.637,2.978,20.498,7.789,29.174l153.183-171.44L9.448,89.085z"/></svg>
+                <div class="content">
+                  <a href="mailto:{{activeMarker.mail}}">{{activeMarker.mail}}</a>
+                </div>
+              </div>     
+
+              <div class="contact-box-website" ng-if="activeMarker.website">
+                <svg viewBox="0 0 20.603 20.603" width="16px" height="16px"><path d="M14.273,18.875c0.021-0.011,0.043-0.021,0.064-0.031c-0.008-0.012-0.016-0.022-0.023-0.034 C14.302,18.829,14.286,18.855,14.273,18.875z"/><path d="M10.175,18.56c-1.659,0-3.205-0.476-4.524-1.287c1.187,0.012-0.883-1.806,0.543-2.085 c1.496-0.294,2.126-2.005,1.647-1.979c-0.478,0.025-1.388-0.247-2.028-1.051c-0.641-0.81-1.202-0.625-1.863-0.498 c-0.578,0.114-1.29,1.786-1.467,2.225c-0.45-0.862-0.755-1.809-0.893-2.81c0.734-0.384,1.932-1.03,2.365-1.387 c0.638-0.529-0.213-0.743-0.318-1.062c-0.104-0.319,0-1.062,0-1.8c0-0.745,1.486-0.745,2.013-1.486 c0.379-0.529-0.315-1.696-0.748-2.328c1.463-1.126,3.289-1.803,5.273-1.803c0.526,0,1.039,0.055,1.54,0.145 c0.147,0.914,0.453,2.171,1.044,2.499c0.957,0.53,2.115,1.697,2.543,1.907c0.426,0.212,0.953,2.018,0.849,2.76 c-0.075,0.524-0.725,1.101-0.991,1.656l4.42,2.754c0.312-0.96,0.484-1.981,0.484-3.044C20.064,4.434,15.626,0,10.176,0 C4.723,0,0.288,4.434,0.288,9.886c0,5.453,4.435,9.889,9.888,9.889c0.207,0,0.409-0.019,0.613-0.031l-0.231-1.204 C10.43,18.546,10.304,18.56,10.175,18.56z M18.744,11.166c-0.187-0.742-0.549-1.458-1.319-2.011 c-0.527-0.372-0.957-2.014-0.637-2.546c0.191-0.317,0.688-0.596,1.054-0.77c0.641,1.209,1.007,2.585,1.007,4.047 C18.849,10.322,18.806,10.747,18.744,11.166z"/><path d="M16.185,15.505l4.129-0.823L9.97,8.237l-0.244,0.17l2.303,11.965l2.248-3.557l2.18,3.176c0.414,0.598,1.174,0.791,1.701,0.43c0.524-0.362,0.618-1.142,0.207-1.741L16.185,15.505z"/></svg>
+                <div class="content">
+                  <a href="http://{{activeMarker.website}}" target="_blank">Ga naar website</a>
+                </div>
+              </div>
+            </div>
+          </div>      
+
+        </div> <!-- end contact-box -->
+
+        <div class="ov-wrapper">
+          <h2>Openbaar vervoer opzoeken</h2>
+
+          <form id="form-start-adres">
+            <input ng-model="startAdres" type="text" placeholder="Voer een startadres in" class="input-start-adres">
+            <button ng-click="showDirections()" type="submit" form="form-start-adres">
+              Zoek openbaar vervoer
+            </button>
+          </form>
+
+          <div id="directions-wrapper">
+            <div id="directions-map"></div>
+            <div id="directions-panel"></div>
+          </div>
+
+          <button ng-if="printButton" type="print" ng-click="printDirections()" class="print-btn">Print</button>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<!--   <div class="dev">
+    <ul>
+      <li><b>Zoom: </b>{{map.zoom}}</li>
+      <li><b>latitude:</b> {{map.center.latitude}}</li>
+      <li><b>longitude: </b>{{map.center.longitude}}</li>
+      <li><b>current location: </b>{{currentLocation.latitude}}; {{currentLocation.longitude}}</li>
+      <li><b>Selected: </b>{{categorieIncludes}}</li>
+      <li><b>Active Marker: </b>{{activeMarker.id}}</li>
+    </ul>
+  </div> -->
+
+</div>

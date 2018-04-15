@@ -1,0 +1,477 @@
+// bower:scss
+// endbower
+
+@import 'normalize';
+@import 'mixins';
+@import 'backgroundsvg';
+@import 'variables';
+@import 'theme';
+@import 'grid';
+
+
+// Default document
+// ============================= //
+
+html {
+  height: 100%;
+}
+
+body {
+  background: $grijs;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $blauw;
+  display: block;
+  height: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.page-wrap {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+input {
+  color: $zwart;
+}
+
+
+// Sections
+// ============================= //
+
+.page-section {
+  min-height: 100vh;
+  background-color: $accent;
+  position: relative;
+}
+
+.container {
+  max-width: 960px;
+  height: auto;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content-wrap {
+  padding: 40px 0;
+  font-size: 200%;
+  text-align: justify;
+  position: relative;
+}
+
+
+// Aside
+// ============================= //
+
+.sidebar {
+  background-color: $lichtgrijs;
+  height: 100%;
+}
+
+// ====== 1. HEADER ======
+
+.sidebar-header {
+  flex: none;
+  padding: 20px 20px 20px 30px;
+  background-image: url('../app/images/bg.png');
+  background-size: cover;
+  background-position: 10% 0%;
+
+  & button {
+    display: none;
+  }
+}
+
+.logo {
+  margin: 10px;
+}
+
+.zoekterm-wrapper {
+  margin-top: 30px;
+}
+
+.input-zoekterm {
+  background: url(data:image/png;base64,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) no-repeat 10px 9px $wit;
+  border: 0 none;
+  color: $wit;
+  text-shadow: 0 0 1px $zwart;
+  background-color: rgba($wit, .4);
+  width: 100%;
+  font-size: 18px;
+  margin-right: 20px;
+  padding: 6px 15px 6px 35px;
+
+  &::placeholder {
+    color: $wit;
+  }
+}
+
+.uitleg {
+  display: block;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: $wit;
+  font-size: 140%;
+  width: 100%;
+  text-shadow: 1px 1px 1px $zwart;
+  font-weight: 900;
+  padding-left: 7px;
+}
+
+.categorie-checkboxen {
+  display: flex;
+  flex-wrap: wrap;
+
+  &:last-child {
+    width: 100%;
+  }
+}
+
+.categorie-checkbox {
+  display: none;
+  visibility: hidden;
+  width: 0;
+
+  &:checked + .categorie-label:before {
+    content: "\2713";  
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);  
+    color: $wit; 
+    margin-right: 7px; 
+  }
+}
+
+.categorie-label {
+  cursor: pointer;
+  padding: 10px 13px;
+  color: $wit;
+  background-color: $blauw;
+  width: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 1px 1px 1px $zwart;
+
+  &:hover {
+    //text-shadow: none;
+  }
+
+  &:before {
+    //margin-left: 10px;
+  }
+
+  &:last-child {
+    width: 100%;
+  }
+}
+
+
+// ====== 2. SECTION ======
+
+.sidebar-section {
+  overflow-y: scroll;
+}
+
+.listed-marker { //a
+  display: block;
+  color: $wit;
+  padding: 10px 10px 10px 20px;
+  transition: all .3s ease;
+  box-shadow: inset 0 -1px 2px 0 rgba($zwart, .5);
+  background-color: $wit;
+}
+
+.creatief {
+  background-color: $creatief;
+
+  &:hover {
+    background-color: rgba($creatief, .9);
+  }
+}
+
+.sport {
+  background-color: $sport;
+
+  &:hover {
+    background-color: rgba($sport, .9);
+  }
+}
+
+.cultuur {
+  background-color: $cultuur;
+
+  &:hover {
+    background-color: rgba($cultuur, .9);
+  }
+}
+
+.varia {
+  background-color: $varia;
+
+  &:hover {
+    background-color: rgba($varia, .9);
+  }
+}
+
+.vorming {
+  background-color: $vorming;
+
+  &:hover {
+    background-color: rgba($vorming, .9);
+  }
+}
+
+.marker-list-organisatie {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.marker-list-type {
+  line-height: 1.5;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+// Maps
+// ============================= //
+
+.angular-google-map-container { 
+  height: 100vh; 
+}
+
+.maps {
+  background-color: $groen;
+  height: 100%;
+  padding: 0;
+  position: relative;
+  color: $zwart;
+}
+
+
+// Marker-info => overlay
+// ============================= //
+
+
+// ====== 0. Algemeen ======
+.marker-info {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba($blauw, .5);
+  display: none;
+
+  a:hover {
+    color: $accent;
+  }
+
+  .container {
+    background-color: $wit;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    position: relative;
+  }
+}
+
+.marker-info-close {
+  padding: 15px;
+  position: absolute;
+  right: 20px;
+  fill: $grijs;
+  
+  &:hover {
+    fill: $accent;
+  }
+}
+
+// ====== 1. MARKER INFO ======
+
+
+//header
+.marker-info-organisatie {
+  font-weight: normal;
+  font-size: 36px;
+  color: $accent;
+
+  h1 {
+    margin-top: 30px;
+  }
+
+  .marker-info-type {
+    text-align: right;
+    color: $zwart;
+    font-size: 16px;
+    margin-right: 30px;
+  }
+}
+
+.marker-info-detail { //adres & website
+  fill: $accent;
+  margin-left: 20px;
+  margin-bottom: 10px;
+
+  .content {
+    display: inline-block;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+}
+
+
+// body-tekst
+.marker-info-omschrijving {
+  max-width: 650px;
+  margin: 10px 60px;
+  line-height: 1.4;
+  font-size: 20px;
+}
+
+
+// contact
+.contact-box {
+  background-color: $lichtgrijs;
+  padding: 20px;
+  color: $zwart;
+  margin-top: 20px;
+  margin-left: auto;
+  fill: $accent;
+
+  #contact-box-svg {
+    float: left;
+  }
+
+  h3 {
+    display: inline-block;
+    margin: 5px 0 20px 20px;
+    font-size: 18px;
+    color: $zwart;
+  }
+
+  .content {
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+}
+
+.contact-box-internal-wrapper {
+  display: flex;
+
+  .contact-box-internal {
+    width: 50%;
+  }
+}
+
+
+// ====== 2. OV BOX ======
+
+.ov-wrapper {
+  margin-top: 20px;
+
+  form {
+    text-align: center;
+  }
+
+  .input-start-adres {
+    padding: 10px;
+    width: 100%;
+    display: block;
+    font-size: 130%;
+
+    @media only screen and(min-width: 75em) {
+      width: 65%;
+      display: inline;
+    }
+  }
+
+  button {
+    width: 100%;
+    display: block;
+    border: none;
+    padding: 10px 20px;
+    background-color: $accent;
+    color: $wit;
+    font-size: 130%;
+    margin: 10px auto;
+
+    @media only screen and(min-width: 75em) {
+      width: 30%;
+      display: inline;
+    }
+  }
+}
+
+#directions-wrapper {
+  display: flex;
+}
+
+#directions-map {
+  height: 500px;
+  flex: 1;
+  margin-right: 20px;
+  margin-top: 6px
+}
+
+#directions-panel {
+  flex: 1;
+
+  img {
+    display: inline;
+  }
+}
+.direction-error {
+  padding: 10px;
+  background-color: $error;
+  border: 1px solid $rood;
+  color: $rood;
+}
+
+.print-btn {
+  float: right;
+}
+
+// Window => pop-up
+// ============================= //
+
+.window-wrapper {
+  width: 101%; //'hack' voor te kleine width
+}
+
+
+// Footer
+// ============================= //
+
+.footer-wrap {
+  position: fixed;
+  bottom: 0;
+  background-color: $zwart;
+  opacity: .5;
+  width: 100%;
+  padding: 5px;
+  margin: 0;
+}
+
+.footer {
+  text-align: right;
+}
+
+
+// DEVELOPMENT
+// ============================= //
+
+// .dev {
+//   color: $wit;
+//   position: absolute;
+//   right: 0;
+//   bottom: 0;
+//   width: 400px;
+//   background-color: rgba($zwart, .5);
+//   padding: 20px;
+// }
+
+
+
